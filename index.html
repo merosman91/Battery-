@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>خبير بطاريات الطاقة الشمسية</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f0f8ff;
+            margin: 0;
+            padding: 20px;
+            color: #2c3e50;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            background: #ffffff;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #1a5276;
+            margin-bottom: 30px;
+            font-size: 28px;
+        }
+
+        .form-section {
+            margin-bottom: 25px;
+            padding: 20px;
+            background: #f9f9f9;
+            border-radius: 8px;
+            border-left: 5px solid #3498db;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #2874a6;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+
+        button {
+            background: #2e86c1;
+            color: white;
+            border: none;
+            padding: 14px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            width: 100%;
+            font-size: 18px;
+            font-weight: bold;
+            transition: background 0.3s;
+            margin-top: 10px;
+        }
+
+        button:hover {
+            background: #2874a6;
+        }
+
+        .result {
+            margin-top: 30px;
+            padding: 25px;
+            background: #eaf2f8;
+            border-radius: 8px;
+            border-left: 5px solid #2980b9;
+            display: none;
+        }
+
+        .result h3 {
+            color: #1a5276;
+            margin-top: 0;
+            border-bottom: 2px solid #aed6f1;
+            padding-bottom: 10px;
+        }
+
+        .result-item {
+            margin-bottom: 15px;
+            padding: 10px;
+            background: white;
+            border-radius: 5px;
+        }
+
+        .brand-comparison {
+            margin-top: 30px;
+        }
+
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+
+        .comparison-table th, .comparison-table td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: center;
+        }
+
+        .comparison-table th {
+            background-color: #2980b9;
+            color: white;
+        }
+
+        .comparison-table tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        .chart-container {
+            margin-top: 30px;
+            height: 300px;
+        }
+
+        .advanced-options {
+            display: none;
+            margin-top: 20px;
+        }
+
+        .toggle-advanced {
+            color: #2980b9;
+            cursor: pointer;
+            text-decoration: underline;
+            font-size: 14px;
+            margin-top: 10px;
+            display: inline-block;
+        }
+
+        .cost-comparison {
+            margin-top: 30px;
+            padding: 20px;
+            background: #f5eef8;
+            border-radius: 8px;
+            border-left: 5px solid #9b59b6;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 15px;
+            }
+            
+            .form-section {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🌞 خبير بطاريات الطاقة الشمسية 🔋</h1>
+        
+        <div class="form-section">
+            <h2>البيانات الأساسية</h2>
+            <div class="form-group">
+                <label for="dailyUsage">استهلاكك اليومي من الكهرباء (كيلوواط ساعة):</label>
+                <input type="number" id="dailyUsage" placeholder="مثال: 10" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="autonomyDays">عدد الأيام التي تريد تخزين الطاقة لها (أيام الاستقلالية):</label>
+                <input type="number" id="autonomyDays" value="1" min="1" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="batteryType">نوع البطارية المفضل:</label>
+                <select id="batteryType">
+                    <option value="lithium">ليثيوم (LiFePO4)</option>
+                    <option value="lead-acid">رصاص-حمض (AGM/GEL)</option>
+                </select>
+            </div>
+            
+            <div class="toggle-advanced" onclick="toggleAdvanced()">إظهار/إخفاء الخيارات المتقدمة ▼</div>
+            
+            <div class="advanced-options" id="advancedOptions">
+                <div class="form-group">
+                    <label for="temperature">متوسط درجة الحرارة في منطقتك:</label>
+                    <select id="temperature">
+                        <option value="normal">معتدلة (15-30°C)</option>
+                        <option value="hot">حارة جداً (أكثر من 30°C)</option>
+                        <option value="cold">باردة جداً (أقل من 15°C)</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="budget">الميزانية المتوقعة:</label>
+                    <select id="budget">
+                        <option value="low">منخفضة</option>
+                        <option value="medium" selected>متوسطة</option>
+                        <option value="high">عالية</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="brand">العلامة التجارية المفضلة (اختياري):</label>
+                    <select id="brand">
+                        <option value="any">أي علامة</option>
+                        <option value="tesla">تسلا (Tesla Powerwall)</option>
+                        <option value="byd">بي واي دي (BYD)</option>
+                        <option value="lg">إل جي (LG Chem)</option>
+                        <option value="local">محلية</option>
+                    </select>
+                </div>
+            </div>
+            
+            <button type="button" onclick="calculateBattery()">احسب احتياجاتك من البطاريات</button>
+        </div>
+        
+        <div id="result" class="result"></div>
+        
+        <div id="costComparison" class="cost-comparison" style="display:none;">
+            <h3>مقارنة التكلفة طويلة الأجل</h3>
+            <div id="costChart" class="chart-container"></div>
+        </div>
+        
+        <div id="brandComparison" class="brand-comparison" style="display:none;">
+            <h3>مقارنة بين العلامات التجارية</h3>
+            <table class="comparison-table">
+                <thead>
+                    <tr>
+                        <th>العلامة التجارية</th>
+                        <th>السعر لكل kWh</th>
+                        <th>العمر الافتراضي</th>
+                        <th>الكفاءة</th>
+                        <th>ملاحظات</th>
+                    </tr>
+                </thead>
+                <tbody id="brandTableBody">
+                    <!-- سيتم ملؤها بالجافاسكريبت -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+    
+    <script>
+        // بيانات العلامات التجارية
+        const brandData = {
+            "tesla": {
+                name: "تسلا باوروال",
+                price: 400,
+                lifespan: "15 سنة",
+                efficiency: "95%",
+                notes: "أفضل للأغراض المنزلية، تصميم أنيق"
+            },
+            "byd": {
+                name: "بي واي دي",
+                price: 350,
+                lifespan: "12 سنة",
+                efficiency: "93%",
+                notes: "جودة عالية بسعر معقول"
+            },
+            "lg": {
+                name: "إل جي كيم",
+                price: 380,
+                lifespan: "14 سنة",
+                efficiency: "94%",
+                notes: "حلول متكاملة للطاقة"
+            },
+            "local": {
+                name: "بطاريات محلية",
+                price: 250,
+                lifespan: "8 سنوات",
+                efficiency: "85%",
+                notes: "مناسبة للميزانيات المحدودة"
+            }
+        };
+
+        // إظهار/إخفاء الخيارات المتقدمة
+        function toggleAdvanced() {
+            const advancedOptions = document.getElementById('advancedOptions');
+            if (advancedOptions.style.display === 'block') {
+                advancedOptions.style.display = 'none';
+            } else {
+                advancedOptions.style.display = 'block';
+            }
+        }
+
+        // الحساب الرئيسي
+        function calculateBattery() {
+            // جلب القيم من النموذج
+            const dailyUsage = parseFloat(document.getElementById('dailyUsage').value);
+            const autonomyDays = parseInt(document.getElementById('autonomyDays').value);
+            const batteryType = document.getElementById('batteryType').value;
+            const temperature = document.getElementById('temperature').value;
+            const budget = document.getElementById('budget').value;
+            const brand = document.getElementById('brand').value;
+            
+            // التحقق من المدخلات
+            if (isNaN(dailyUsage) || dailyUsage <= 0) {
+                alert("الرجاء إدخال استهلاك يومي صحيح!");
+                return;
+            }
+            
+            // معاملات الحساب
+            let dodFactor, costPerKWh, lifespan, efficiency, tempEffect;
+            
+            if (batteryType === 'lithium') {
+                dodFactor = 0.8;
+                costPerKWh = (budget === 'high') ? 400 : (budget === 'medium') ? 350 : 300;
+                lifespan = "10-15 سنة";
+                efficiency = "95%";
+                tempEffect = (temperature === 'hot') ? " (تتأثر قليلاً بالحرارة)" : 
+                            (temperature === 'cold') ? " (أداء أفضل في البرد)" : "";
+            } else {
+                dodFactor = 0.5;
+                costPerKWh = (budget === 'high') ? 200 : (budget === 'medium') ? 150 : 100;
+                lifespan = "3-5 سنوات";
+                efficiency = "80%";
+                tempEffect = (temperature === 'hot') ? " (تتأثر بشدة بالحرارة)" : 
+                            (temperature === 'cold') ? " (تتأثر بالبرد وتفقد كفاءتها)" : "";
+            }
+            
+            // حساب السعة المطلوبة
+            const capacityKWh = (dailyUsage * autonomyDays) / dodFactor;
+            
+            // حساب التكلفة التقريبية
+            const costEstimate = capacityKWh * costPerKWh;
+            
+            // التوصيات بناءً على العلامة التجارية
+            let brandRecommendation = "";
+            if (brand !== 'any') {
+                const selectedBrand = brandData[brand];
+                brandRecommendation = `
+                    <div class="result-item">
+                        <h4>العلامة التجارية المختارة: ${selectedBrand.name}</h4>
+                        <p><strong>التكلفة المتوقعة:</strong> ~${(capacityKWh * selectedBrand.price).toFixed(0)} دولار</p>
+                        <p><strong>العمر الافتراضي:</strong> ${selectedBrand.lifespan}</p>
+                        <p><strong>ملاحظات:</strong> ${selectedBrand.notes}</p>
+                    </div>
+                `;
+            }
+            
+            // عرض النتيجة
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = `
+                <h3>التوصية الفنية</h3>
+                <div class="result-item">
+                    <p><strong>السعة المطلوبة:</strong> ${capacityKWh.toFixed(2)} kWh</p>
+                    <p><strong>نوع البطارية:</strong> ${batteryType === 'lithium' ? 'ليثيوم (LiFePO4)' : 'رصاص-حمض (AGM/GEL)'}${tempEffect}</p>
+                    <p><strong>التكلفة التقريبية:</strong> ~${costEstimate.toFixed(0)} دولار</p>
+                    <p><strong>العمر الافتراضي:</strong> ${lifespan}</p>
+                    <p><strong>كفاءة الشحن/التفريغ:</strong> ${efficiency}</p>
+                </div>
+                ${brandRecommendation}
+                <button type="button" onclick="showComparisons()">عرض المقارنات التفصيلية</button>
+            `;
+            resultDiv.style.display = 'block';
+            
+            // إخفاء أقسام المقارنة حتى يطلبها المستخدم
+            document.getElementById('costComparison').style.display = 'none';
+            document.getElementById('brandComparison').style.display = 'none';
+        }
+        
+        // عرض المقارنات التفصيلية
+        function showComparisons() {
+            // مقارنة العلامات التجارية
+            const tableBody = document.getElementById('brandTableBody');
+            tableBody.innerHTML = '';
+            
+            for (const [key, brand] of Object.entries(brandData)) {
+                tableBody.innerHTML += `
+                    <tr>
+                        <td>${brand.name}</td>
+                        <td>~${brand.price} دولار</td>
+                        <td>${brand.lifespan}</td>
+                        <td>${brand.efficiency}</td>
+                        <td>${brand.notes}</td>
+                    </tr>
+                `;
+            }
+            
+            // مقارنة التكلفة طويلة الأجل
+            const dailyUsage = parseFloat(document.getElementById('dailyUsage').value);
+            const capacityLead = (dailyUsage * 1) / 0.5; // 50% DoD
+            const capacityLithium = (dailyUsage * 1) / 0.8; // 80% DoD
+            
+            const costLead10Years = Math.ceil(capacityLead * 150 * 3); // 3 استبدالات في 10 سنوات
+            const costLithium10Years = Math.ceil(capacityLithium * 350); // استبدال واحد
+            
+            document.getElementById('costComparison').innerHTML = `
+                <h3>مقارنة التكلفة طويلة الأجل (10 سنوات)</h3>
+                <div class="result-item">
+                    <p><strong>بطاريات الرصاص:</strong> ~${costLead10Years} دولار (مع 3 استبدالات)</p>
+                    <p><strong>بطاريات الليثيوم:</strong> ~${costLithium10Years} دولار</p>
+                    <p>ملاحظة: بطاريات الليثيوم قد تكون أكثر توفيراً على المدى الطويل رغم تكلفتها الأولية الأعلى</p>
+                </div>
+            `;
+            
+            // إظهار أقسام المقارنة
+            document.getElementById('costComparison').style.display = 'block';
+            document.getElementById('brandComparison').style.display = 'block';
+            
+            // التمرير إلى قسم النتائج
+            document.getElementById('result').scrollIntoView({ behavior: 'smooth' });
+        }
+    </script>
+</body>
+  </html>

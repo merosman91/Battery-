@@ -5,16 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>خبير بطاريات الطاقة الشمسية</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
     <style>
         :root {
             --lithium-color: #3498db;
             --lead-color: #e74c3c;
             --savings-color: #2ecc71;
             --warning-color: #f39c12;
+            --highlight-color: #f1c40f;
         }
         
         body {
-            font-family: 'Tajawal', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Tajawal', sans-serif;
             background-color: #f0f8ff;
             margin: 0;
             padding: 20px;
@@ -23,7 +25,7 @@
         }
 
         .container {
-            max-width: 1000px;
+            max-width: 1100px;
             margin: 20px auto;
             background: #ffffff;
             padding: 30px;
@@ -33,7 +35,6 @@
 
         h1, h2, h3, h4 {
             color: #1a5276;
-            font-family: 'Tajawal', sans-serif;
         }
 
         h1 {
@@ -78,7 +79,6 @@
             font-size: 16px;
             box-sizing: border-box;
             margin-bottom: 5px;
-            font-family: 'Tajawal', sans-serif;
         }
 
         button {
@@ -93,7 +93,6 @@
             font-weight: bold;
             transition: background 0.3s;
             margin-top: 10px;
-            font-family: 'Tajawal', sans-serif;
         }
 
         button:hover {
@@ -121,10 +120,6 @@
             box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
 
-        .comparison-section {
-            margin-top: 30px;
-        }
-
         .chart-container {
             margin: 30px 0;
             height: 400px;
@@ -143,16 +138,17 @@
             display: flex;
             margin-bottom: 20px;
             gap: 5px;
+            flex-wrap: wrap;
         }
 
         .tab-btn {
             flex: 1;
+            min-width: 120px;
             padding: 12px;
             text-align: center;
             background: #ddd;
             border: none;
             cursor: pointer;
-            font-family: 'Tajawal', sans-serif;
             font-weight: bold;
             border-radius: 5px;
             transition: all 0.3s;
@@ -175,7 +171,7 @@
         }
 
         .supplier-map {
-            height: 400px;
+            height: 500px;
             background: #eee;
             margin: 20px 0;
             border-radius: 8px;
@@ -188,6 +184,24 @@
             cursor: help;
             border-bottom: 1px dotted #2980b9;
             font-weight: bold;
+            position: relative;
+        }
+
+        .glossary-term:hover::after {
+            content: attr(title);
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #2c3e50;
+            color: white;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: normal;
+            white-space: nowrap;
+            z-index: 10;
+            box-shadow: 0 3px 6px rgba(0,0,0,0.2);
         }
 
         .theme-lithium {
@@ -207,42 +221,56 @@
             display: none;
         }
 
-        .brand-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 20px 0;
-            font-size: 0.9em;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        .battery-count {
+            background-color: #e8f8f5;
+            border-left: 5px solid #1abc9c;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
         }
 
-        .brand-table th, .brand-table td {
-            padding: 12px 15px;
-            text-align: right;
-            border-bottom: 1px solid #dddddd;
+        .map-controls {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+            flex-wrap: wrap;
         }
 
-        .brand-table th {
-            background-color: #2980b9;
-            color: white;
+        .map-control {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .country-select {
             font-weight: bold;
         }
 
-        .brand-table tr:nth-child(even) {
-            background-color: #f3f3f3;
+        .city-select {
+            margin-left: 10px;
         }
 
-        .brand-table tr:hover {
-            background-color: #e6f7ff;
+        .battery-specs {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 15px;
         }
 
-        .brand-table .rating {
-            color: #f39c12;
+        .spec-card {
+            flex: 1;
+            min-width: 200px;
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .spec-title {
             font-weight: bold;
-        }
-
-        .notes-cell {
-            font-size: 0.85em;
-            color: #555;
+            color: #2980b9;
+            margin-bottom: 8px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 5px;
         }
 
         @media (max-width: 768px) {
@@ -262,9 +290,8 @@
                 flex-direction: column;
             }
 
-            .brand-table {
-                display: block;
-                overflow-x: auto;
+            .supplier-map {
+                height: 350px;
             }
         }
 
@@ -298,6 +325,12 @@
             border-radius: 5px;
             box-shadow: 0 0 10px rgba(0,0,0,0.2);
         }
+
+        .leaflet-popup-content {
+            direction: rtl;
+            text-align: right;
+            font-family: 'Tajawal', sans-serif;
+        }
     </style>
     <!-- Leaflet CSS -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
@@ -309,7 +342,7 @@
         <div class="form-section">
             <h2>البيانات الأساسية</h2>
             <div class="form-group">
-                <label for="dailyUsage">استهلاكك اليومي من الكهرباء (كيلوواط ساعة):</label>
+                <label for="dailyUsage">استهلاكك اليومي من الكهرباء (كيلوواط ساعة kWh):</label>
                 <input type="number" id="dailyUsage" placeholder="مثال: 15" required>
                 <small>يمكنك معرفة استهلاكك من فاتورة الكهرباء</small>
             </div>
@@ -326,6 +359,12 @@
                     <option value="lithium">ليثيوم (LiFePO4)</option>
                     <option value="lead-acid">رصاص-حمض (AGM/GEL)</option>
                 </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="batteryCapacity">سعة البطارية الواحدة (اختياري):</label>
+                <input type="number" id="batteryCapacity" placeholder="اتركه فارغاً للحساب التلقائي">
+                <small>بالكيلوواط ساعة (kWh)، مثال: 5 للبطارية الواحدة</small>
             </div>
             
             <div class="form-group">
@@ -362,9 +401,9 @@
                     <h3>التوصية الفنية</h3>
                     <div id="techResult" class="result-item animated"></div>
                     
-                    <div id="installationResult" class="result-item animated"></div>
+                    <div id="batteryCountResult" class="battery-count animated"></div>
                     
-                    <div id="brandResult" class="result-item animated" style="display:none;"></div>
+                    <div id="installationResult" class="result-item animated"></div>
                     
                     <div class="chart-container">
                         <canvas id="performanceChart"></canvas>
@@ -397,17 +436,26 @@
                     <div id="brandComparison"></div>
                     
                     <h4>موردون محليون</h4>
-                    <div class="map-container">
-                        <div id="supplierMap" class="supplier-map"></div>
-                        <div class="map-overlay">
-                            <label for="citySelect">اختر المدينة:</label>
-                            <select id="citySelect" onchange="updateMap()">
-                                <option value="riyadh">الرياض</option>
-                                <option value="jeddah">جدة</option>
-                                <option value="dammam">الدمام</option>
-                                <option value="medina">المدينة المنورة</option>
+                    <div class="map-controls">
+                        <div class="map-control">
+                            <label for="countrySelect">الدولة:</label>
+                            <select id="countrySelect" class="country-select" onchange="updateCountry()">
+                                <option value="saudi">المملكة العربية السعودية</option>
+                                <option value="uae">الإمارات العربية المتحدة</option>
+                                <option value="egypt">مصر</option>
+                                <option value="kuwait">الكويت</option>
+                                <option value="jordan">الأردن</option>
                             </select>
                         </div>
+                        <div class="map-control">
+                            <label for="citySelect">المدينة:</label>
+                            <select id="citySelect" class="city-select" onchange="updateMap()">
+                                <!-- سيتم ملؤها بالجافاسكريبت -->
+                            </select>
+                        </div>
+                    </div>
+                    <div class="map-container">
+                        <div id="supplierMap" class="supplier-map"></div>
                     </div>
                 </div>
             </div>
@@ -418,19 +466,35 @@
                     
                     <div class="info-card">
                         <h4>أسئلة شائعة</h4>
-                        <p><strong>س: ما الفرق بين بطاريات الليثيوم والرصاص؟</strong><br>
-                        ج: بطاريات الليثيوم أخف وزناً، عمرها أطول (10-15 سنة) ولكنها أغلى سعراً. بينما بطاريات الرصاص أرخص ولكن عمرها أقصر (3-5 سنوات).</p>
+                        <p><strong>س: ما الفرق بين <span class="glossary-term" title="وحدة قياس الطاقة الكهربائية (ألف واط في ساعة)">كيلوواط ساعة (kWh)</span> و <span class="glossary-term" title="وحدة قياس القدرة الكهربائية (ألف فولت أمبير)">كيلو فولت أمبير (kVA)</span>؟</strong><br>
+                        ج: الكيلوواط ساعة تقيس الطاقة الفعلية المستهلكة، بينما kVA تقيس الطاقة الظاهرية (تستخدم عادةً للمولدات).</p>
                         
-                        <p><strong>س: ما هو <span class="glossary-term" title="النسبة المئوية للطاقة التي يمكن استخدامها من البطارية دون إتلافها">عمق التفريغ</span>؟</strong><br>
-                        ج: بطاريات الليثيوم تصل إلى 80-90%، بينما الرصاص 50% فقط.</p>
-                        
-                        <p><strong>س: كيف أختار نوع التركيب المناسب؟</strong><br>
-                        ج: <span class="glossary-term" title="للأسطح القوية والمساحات المحدودة">الأسطح</span> مناسبة للمنازل، <span class="glossary-term" title="للمساحات الكبيرة وسهولة الصيانة">الأرضي</span> للمشاريع التجارية، <span class="glossary-term" title="للأنظمة الصغيرة والمتوسطة">الحائطي</span> حل وسطي.</p>
+                        <p><strong>س: كيف أحسب احتياجاتي من البطاريات؟</strong><br>
+                        ج: تحتاج إلى معرفة <span class="glossary-term" title="إجمالي استهلاكك اليومي من الكهرباء بالكيلوواط ساعة">الاستهلاك اليومي</span> وعدد <span class="glossary-term" title="الأيام التي تريد أن تعمل فيها بدون شمس">أيام الاستقلالية</span> ونوع <span class="glossary-term" title="نسبة الطاقة القابلة للاستخدام من البطارية">عمق التفريغ</span>.</p>
                     </div>
                     
                     <div class="info-card">
                         <h4>قاموس المصطلحات</h4>
-                        <p><span class="glossary-term" title="نوع آمن من بطاريات الليثيوم">LiFePO4</span> - <span class="glossary-term" title="بطاريات الرصاص المغلقة">AGM/GEL</span> - <span class="glossary-term" title="نسبة الطاقة المستفاد بها بعد الشحن والتفريغ">الكفاءة</span> - <span class="glossary-term" title="عدد السنوات المتوقع أن تعمل فيها البطارية بكفاءة">العمر الافتراضي</span></p>
+                        <div class="battery-specs">
+                            <div class="spec-card">
+                                <div class="spec-title">وحدات القياس</div>
+                                <p><span class="glossary-term" title="كيلوواط ساعة - وحدة قياس الطاقة">kWh</span>: الطاقة</p>
+                                <p><span class="glossary-term" title="كيلووات - وحدة قياس القدرة">kW</span>: القدرة</p>
+                                <p><span class="glossary-term" title="أمبير ساعة - سعة البطارية">Ah</span>: السعة</p>
+                            </div>
+                            <div class="spec-card">
+                                <div class="spec-title">أنواع البطاريات</div>
+                                <p><span class="glossary-term" title="بطاريات الليثيوم الحديد فوسفات">LiFePO4</span>: الأكثر أماناً</p>
+                                <p><span class="glossary-term" title="بطاريات الرصاص المغمورة">Flooded</span>: تحتاج صيانة</p>
+                                <p><span class="glossary-term" title="بطاريات الرصاص المغلقة">AGM/GEL</span>: لا تحتاج صيانة</p>
+                            </div>
+                            <div class="spec-card">
+                                <div class="spec-title">مصطلحات فنية</div>
+                                <p><span class="glossary-term" title="نسبة الطاقة المستخدمة من البطارية">عمق التفريغ (DoD)</span></p>
+                                <p><span class="glossary-term" title="عدد دورات الشحن الكاملة">دورات الشحن</span></p>
+                                <p><span class="glossary-term" title="نسبة الطاقة المفقودة أثناء الشحن/التفريغ">الكفاءة</span></p>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -449,7 +513,8 @@
                 efficiency: 95,
                 notes: "أفضل للأغراض المنزلية، تصميم أنيق، نظام إدارة ذكي",
                 rating: 4.8,
-                weight: 114
+                weight: 114,
+                capacities: [5, 10, 15]
             },
             "byd": {
                 name: "بي واي دي",
@@ -458,7 +523,8 @@
                 efficiency: 93,
                 notes: "جودة عالية بسعر معقول، شهادة أمان ممتازة",
                 rating: 4.5,
-                weight: 98
+                weight: 98,
+                capacities: [2.5, 5, 7.5, 10]
             },
             "lg": {
                 name: "إل جي كيم",
@@ -467,7 +533,8 @@
                 efficiency: 94,
                 notes: "حلول متكاملة للطاقة، كفاءة عالية في المساحات الصغيرة",
                 rating: 4.6,
-                weight: 105
+                weight: 105,
+                capacities: [3, 6, 9, 12]
             },
             "local": {
                 name: "بطاريات محلية",
@@ -476,28 +543,89 @@
                 efficiency: 85,
                 notes: "مناسبة للميزانيات المحدودة، توفر قطع غيار محلية",
                 rating: 3.9,
-                weight: 120
+                weight: 120,
+                capacities: [1, 2, 5, 10]
             }
         };
 
-        // بيانات الموردين حسب المدينة
+        // بيانات الموردين حسب البلد والمدينة
         const supplierLocations = {
-            "riyadh": [
-                {name: "الشركة السعودية للطاقة", lat: 24.7136, lng: 46.6753, address: "حي العليا، الرياض"},
-                {name: "مستودع الشمس", lat: 24.8136, lng: 46.7153, address: "حي النخيل، الرياض"},
-                {name: "تقنية البطاريات", lat: 24.6536, lng: 46.7753, address: "حي السليمانية، الرياض"}
-            ],
-            "jeddah": [
-                {name: "مركز جدة للطاقة", lat: 21.5433, lng: 39.1728, address: "حي الصفا، جدة"},
-                {name: "تكنو باور", lat: 21.5833, lng: 39.1428, address: "حي الحمراء، جدة"}
-            ],
-            "dammam": [
-                {name: "شركة الخليج للطاقة", lat: 26.4207, lng: 50.0888, address: "حي النخيل، الدمام"},
-                {name: "الشرقية للطاقة الشمسية", lat: 26.3807, lng: 50.0988, address: "حي الشاطئ، الدمام"}
-            ],
-            "medina": [
-                {name: "المدينة للطاقة النظيفة", lat: 24.5247, lng: 39.5692, address: "حي العزيزية، المدينة"}
-            ]
+            "saudi": {
+                name: "المملكة العربية السعودية",
+                cities: {
+                    "riyadh": {
+                        name: "الرياض",
+                        center: [24.7136, 46.6753],
+                        zoom: 12,
+                        suppliers: [
+                            {name: "الشركة السعودية للطاقة", lat: 24.7136, lng: 46.6753, address: "حي العليا، الرياض", phone: "+966112345678"},
+                            {name: "مستودع الشمس", lat: 24.8136, lng: 46.7153, address: "حي النخيل، الرياض", phone: "+966112345679"},
+                            {name: "تقنية البطاريات", lat: 24.6536, lng: 46.7753, address: "حي السليمانية، الرياض", phone: "+966112345680"}
+                        ]
+                    },
+                    "jeddah": {
+                        name: "جدة",
+                        center: [21.5433, 39.1728],
+                        zoom: 12,
+                        suppliers: [
+                            {name: "مركز جدة للطاقة", lat: 21.5433, lng: 39.1728, address: "حي الصفا، جدة", phone: "+966122345678"},
+                            {name: "تكنو باور", lat: 21.5833, lng: 39.1428, address: "حي الحمراء، جدة", phone: "+966122345679"}
+                        ]
+                    },
+                    "dammam": {
+                        name: "الدمام",
+                        center: [26.4207, 50.0888],
+                        zoom: 12,
+                        suppliers: [
+                            {name: "شركة الخليج للطاقة", lat: 26.4207, lng: 50.0888, address: "حي النخيل، الدمام", phone: "+966133345678"},
+                            {name: "الشرقية للطاقة الشمسية", lat: 26.3807, lng: 50.0988, address: "حي الشاطئ، الدمام", phone: "+966133345679"}
+                        ]
+                    }
+                }
+            },
+            "uae": {
+                name: "الإمارات العربية المتحدة",
+                cities: {
+                    "dubai": {
+                        name: "دبي",
+                        center: [25.2048, 55.2708],
+                        zoom: 12,
+                        suppliers: [
+                            {name: "مركز دبي للطاقة", lat: 25.2048, lng: 55.2708, address: "برج خليفة، دبي", phone: "+97142345678"},
+                            {name: "تكنولوجيا الطاقة", lat: 25.2248, lng: 55.2908, address: "المركز التجاري، دبي", phone: "+97142345679"}
+                        ]
+                    },
+                    "abudhabi": {
+                        name: "أبوظبي",
+                        center: [24.4539, 54.3773],
+                        zoom: 12,
+                        suppliers: [
+                            {name: "شركة أبوظبي للطاقة", lat: 24.4539, lng: 54.3773, address: "كورنيش أبوظبي", phone: "+97124456789"}
+                        ]
+                    }
+                }
+            },
+            "egypt": {
+                name: "مصر",
+                cities: {
+                    "cairo": {
+                        name: "القاهرة",
+                        center: [30.0444, 31.2357],
+                        zoom: 12,
+                        suppliers: [
+                            {name: "الشركة المصرية للطاقة", lat: 30.0444, lng: 31.2357, address: "وسط البلد، القاهرة", phone: "+20223456789"}
+                        ]
+                    },
+                    "alexandria": {
+                        name: "الإسكندرية",
+                        center: [31.2001, 29.9187],
+                        zoom: 12,
+                        suppliers: [
+                            {name: "مستودع الإسكندرية", lat: 31.2001, lng: 29.9187, address: "سيدي جابر، الإسكندرية", phone: "+2034567890"}
+                        ]
+                    }
+                }
+            }
         };
 
         // خريطة الموردين
@@ -511,6 +639,35 @@
                 attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
             }).addTo(map);
             
+            // تهيئة قائمة الدول والمدن
+            updateCountryDropdowns();
+            updateMap();
+        }
+
+        function updateCountryDropdowns() {
+            const countrySelect = document.getElementById('countrySelect');
+            const citySelect = document.getElementById('citySelect');
+            
+            // تعبئة قائمة المدن حسب الدولة المختارة
+            updateCityDropdown(countrySelect.value);
+        }
+
+        function updateCityDropdown(country) {
+            const citySelect = document.getElementById('citySelect');
+            citySelect.innerHTML = '';
+            
+            const cities = supplierLocations[country].cities;
+            for (const [key, city] of Object.entries(cities)) {
+                const option = document.createElement('option');
+                option.value = key;
+                option.textContent = city.name;
+                citySelect.appendChild(option);
+            }
+        }
+
+        function updateCountry() {
+            const country = document.getElementById('countrySelect').value;
+            updateCityDropdown(country);
             updateMap();
         }
 
@@ -519,18 +676,29 @@
             markers.forEach(marker => map.removeLayer(marker));
             markers = [];
             
+            const country = document.getElementById('countrySelect').value;
             const city = document.getElementById('citySelect').value;
-            const suppliers = supplierLocations[city];
             
-            suppliers.forEach(supplier => {
+            const cityData = supplierLocations[country].cities[city];
+            
+            // تحديث مركز الخريطة ومستوى التكبير
+            map.setView(cityData.center, cityData.zoom);
+            
+            // إضافة العلامات الجديدة
+            cityData.suppliers.forEach(supplier => {
                 const marker = L.marker([supplier.lat, supplier.lng])
                     .addTo(map)
-                    .bindPopup(`<b>${supplier.name}</b><br>${supplier.address}`);
+                    .bindPopup(`
+                        <b>${supplier.name}</b><br>
+                        ${supplier.address}<br>
+                        الهاتف: ${supplier.phone}<br>
+                        <small>${supplierLocations[country].name} - ${cityData.name}</small>
+                    `);
                 
                 markers.push(marker);
             });
             
-            if (suppliers.length > 0) {
+            if (cityData.suppliers.length > 0) {
                 const group = new L.featureGroup(markers);
                 map.fitBounds(group.getBounds().pad(0.2));
             }
@@ -569,6 +737,7 @@
             const autonomyDays = parseInt(document.getElementById('autonomyDays').value);
             const batteryType = document.getElementById('batteryType').value;
             const installation = document.getElementById('installation').value;
+            const batteryCapacity = parseFloat(document.getElementById('batteryCapacity').value) || null;
             
             // التحقق من المدخلات
             if (isNaN(dailyUsage) || dailyUsage <= 0) {
@@ -607,6 +776,15 @@
             // حساب السعة المطلوبة
             const capacityKWh = (dailyUsage * autonomyDays) / dodFactor;
             
+            // حساب عدد البطاريات المطلوبة
+            let batteryCount = 1;
+            let usedBatteryCapacity = capacityKWh;
+            
+            if (batteryCapacity && batteryCapacity > 0) {
+                batteryCount = Math.ceil(capacityKWh / batteryCapacity);
+                usedBatteryCapacity = batteryCapacity;
+            }
+            
             // حساب التكلفة مع تعديل التركيب
             const baseCost = capacityKWh * costPerKWh;
             const installationCost = baseCost * (installationCostFactor - 1);
@@ -620,7 +798,7 @@
             const carbonReduction = dailyUsage * 0.5 * 365; // كجم CO2 سنوياً
             
             // عرض النتائج
-            showTechnicalResults(isLithium, capacityKWh, totalCost, efficiency, lifespan, installation, installationNotes, installationCost);
+            showTechnicalResults(isLithium, capacityKWh, totalCost, efficiency, lifespan, installation, installationNotes, installationCost, batteryCount, usedBatteryCapacity);
             showFinancialResults(annualSavings, paybackYears, carbonReduction);
             drawCharts(isLithium, capacityKWh, totalCost, annualSavings);
             showBrandComparison();
@@ -631,18 +809,26 @@
         }
         
         // عرض النتائج الفنية
-        function showTechnicalResults(isLithium, capacity, cost, efficiency, lifespan, installation, installationNotes, installationCost) {
+        function showTechnicalResults(isLithium, capacity, cost, efficiency, lifespan, installation, installationNotes, installationCost, batteryCount, batteryCapacity) {
             const typeName = isLithium ? "ليثيوم (LiFePO4)" : "رصاص-حمض (AGM/GEL)";
             const installationText = installation === 'roof' ? "أسطح المنازل" : 
                                    installation === 'ground' ? "أرضي" : "حائطي";
             
             document.getElementById('techResult').innerHTML = `
                 <h4>المواصفات الفنية</h4>
-                <p><strong>السعة المطلوبة:</strong> ${capacity.toFixed(2)} kWh</p>
+                <p><strong>السعة الإجمالية المطلوبة:</strong> ${capacity.toFixed(2)} kWh</p>
                 <p><strong>نوع البطارية:</strong> ${typeName}</p>
                 <p><strong>كفاءة الشحن/التفريغ:</strong> ${(efficiency * 100).toFixed(0)}%</p>
                 <p><strong>العمر الافتراضي:</strong> ${lifespan} سنوات</p>
                 <p><strong>التكلفة الأساسية:</strong> ~${(cost / 1.1).toFixed(0)} دولار</p>
+            `;
+            
+            document.getElementById('batteryCountResult').innerHTML = `
+                <h4>تفاصيل البطاريات</h4>
+                <p><strong>عدد البطاريات المطلوبة:</strong> ${batteryCount}</p>
+                <p><strong>سعة البطارية الواحدة:</strong> ${batteryCapacity.toFixed(2)} kWh</p>
+                <p><strong>السعة الإجمالية:</strong> ${(batteryCount * batteryCapacity).toFixed(2)} kWh</p>
+                ${batteryCount > 1 ? `<p><small>ملاحظة: يتم توصيل البطاريات ${isLithium ? "على التوازي" : "حسب متطلبات النظام"}</small></p>` : ''}
             `;
             
             document.getElementById('installationResult').innerHTML = `
@@ -670,6 +856,7 @@
                 <ul>
                     <li>زراعة ${Math.round(carbonReduction / 20)} شجرة سنوياً</li>
                     <li>توفير ${Math.round(carbonReduction / 100)} برميل نفط سنوياً</li>
+                    <li>إزالة ${Math.round(carbonReduction / 1000)} سيارة من الطريق</li>
                 </ul>
             `;
         }
@@ -850,6 +1037,7 @@
                             <th>العمر (سنوات)</th>
                             <th>الكفاءة</th>
                             <th>الوزن (كجم)</th>
+                            <th>السعات المتوفرة</th>
                             <th>التقييم</th>
                             <th>ملاحظات</th>
                         </tr>
@@ -864,6 +1052,7 @@
                         <td>${brand.lifespan}</td>
                         <td>${brand.efficiency}%</td>
                         <td>${brand.weight}</td>
+                        <td>${brand.capacities.join(', ')} kWh</td>
                         <td class="rating">${'★'.repeat(Math.floor(brand.rating))}${'☆'.repeat(5-Math.floor(brand.rating))} ${brand.rating}</td>
                         <td class="notes-cell">${brand.notes}</td>
                     </tr>`;
@@ -880,4 +1069,4 @@
         };
     </script>
 </body>
-    </html>
+                    </html>

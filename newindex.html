@@ -1,0 +1,1233 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>خبير بطاريات الطاقة الشمسية</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --lithium-color: #3498db;
+            --lead-color: #e74c3c;
+            --savings-color: #2ecc71;
+            --warning-color: #f39c12;
+            --highlight-color: #f1c40f;
+            --whatsapp-color: #25D366;
+        }
+        
+        body {
+            font-family: 'Tajawal', sans-serif;
+            background-color: #f0f8ff;
+            margin: 0;
+            padding: 20px;
+            color: #2c3e50;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 20px auto;
+            background: #ffffff;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        }
+
+        h1, h2, h3, h4 {
+            color: #1a5276;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 28px;
+            border-bottom: 2px solid #aed6f1;
+            padding-bottom: 10px;
+        }
+
+        h2 {
+            font-size: 22px;
+            margin-top: 30px;
+            border-right: 4px solid var(--lithium-color);
+            padding-right: 10px;
+        }
+
+        .form-section {
+            margin-bottom: 25px;
+            padding: 20px;
+            background: #f9f9f9;
+            border-radius: 8px;
+            border-left: 5px solid #3498db;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #2874a6;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 16px;
+            box-sizing: border-box;
+            margin-bottom: 5px;
+        }
+
+        button {
+            background: #2e86c1;
+            color: white;
+            border: none;
+            padding: 14px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            width: 100%;
+            font-size: 18px;
+            font-weight: bold;
+            transition: background 0.3s;
+            margin-top: 10px;
+        }
+
+        button:hover {
+            background: #1a5276;
+        }
+
+        .result-section {
+            margin-top: 30px;
+            display: none;
+        }
+
+        .result-card {
+            padding: 25px;
+            background: #eaf2f8;
+            border-radius: 8px;
+            border-left: 5px solid #2980b9;
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .result-item {
+            margin-bottom: 15px;
+            padding: 15px;
+            background: white;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .battery-count {
+            background-color: #e8f8f5;
+            border-left: 5px solid #1abc9c;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+        }
+
+        .chart-container {
+            margin: 30px 0;
+            height: 400px;
+            position: relative;
+        }
+
+        .info-card {
+            background: #f5f5f5;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            border-left: 4px solid #16a085;
+        }
+
+        .tab-buttons {
+            display: flex;
+            margin-bottom: 20px;
+            gap: 5px;
+            flex-wrap: wrap;
+        }
+
+        .tab-btn {
+            flex: 1;
+            min-width: 120px;
+            padding: 12px;
+            text-align: center;
+            background: #ddd;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+            border-radius: 5px;
+            transition: all 0.3s;
+        }
+
+        .tab-btn.active {
+            background: var(--lithium-color);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+
+        .tab-content {
+            display: none;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .supplier-map {
+            height: 500px;
+            background: #eee;
+            margin: 20px 0;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid #ddd;
+        }
+
+        .glossary-term {
+            color: #2980b9;
+            cursor: help;
+            border-bottom: 1px dotted #2980b9;
+            font-weight: bold;
+            position: relative;
+        }
+
+        .glossary-term:hover::after {
+            content: attr(title);
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #2c3e50;
+            color: white;
+            padding: 8px 12px;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: normal;
+            white-space: nowrap;
+            z-index: 10;
+            box-shadow: 0 3px 6px rgba(0,0,0,0.2);
+        }
+
+        .installation-warning {
+            background-color: #fef9e7;
+            border-left: 5px solid var(--warning-color);
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            display: none;
+        }
+
+        .map-controls {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+            flex-wrap: wrap;
+        }
+
+        .map-control {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .country-select {
+            font-weight: bold;
+        }
+
+        .city-select {
+            margin-left: 10px;
+        }
+
+        .battery-specs {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .spec-card {
+            flex: 1;
+            min-width: 200px;
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .spec-title {
+            font-weight: bold;
+            color: #2980b9;
+            margin-bottom: 8px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 5px;
+        }
+
+        .brand-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            font-size: 0.9em;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .brand-table th, .brand-table td {
+            padding: 12px 15px;
+            text-align: right;
+            border-bottom: 1px solid #dddddd;
+        }
+
+        .brand-table th {
+            background-color: #2980b9;
+            color: white;
+            font-weight: bold;
+        }
+
+        .brand-table tr:nth-child(even) {
+            background-color: #f3f3f3;
+        }
+
+        .brand-table tr:hover {
+            background-color: #e6f7ff;
+        }
+
+        .brand-table .rating {
+            color: #f39c12;
+            font-weight: bold;
+        }
+
+        .notes-cell {
+            font-size: 0.85em;
+            color: #555;
+        }
+
+        .share-section {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .whatsapp-share {
+            background-color: var(--whatsapp-color);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: background 0.3s;
+        }
+
+        .whatsapp-share:hover {
+            background-color: #128C7E;
+        }
+
+        .whatsapp-icon {
+            width: 20px;
+            height: 20px;
+        }
+
+        .signature {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+            color: #666;
+            font-size: 14px;
+        }
+
+        .signature a {
+            color: #2980b9;
+            text-decoration: none;
+        }
+
+        .signature a:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+            
+            .form-section {
+                padding: 15px;
+            }
+            
+            .chart-container {
+                height: 300px;
+            }
+
+            .tab-buttons {
+                flex-direction: column;
+            }
+
+            .supplier-map {
+                height: 350px;
+            }
+
+            .brand-table {
+                display: block;
+                overflow-x: auto;
+            }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .animated {
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        #map { 
+            height: 100%; 
+            z-index: 1;
+        }
+
+        .map-container {
+            position: relative;
+        }
+
+        .map-overlay {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            z-index: 2;
+            background: white;
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.2);
+        }
+
+        .leaflet-popup-content {
+            direction: rtl;
+            text-align: right;
+            font-family: 'Tajawal', sans-serif;
+        }
+    </style>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+</head>
+<body>
+    <div class="container">
+        <h1>🌞 خبير بطاريات الطاقة الشمسية المتكامل 🔋</h1>
+        
+        <div class="form-section">
+            <h2>البيانات الأساسية</h2>
+            <div class="form-group">
+                <label for="dailyUsage">استهلاكك اليومي من الكهرباء (كيلوواط ساعة kWh):</label>
+                <input type="number" id="dailyUsage" placeholder="مثال: 15" required>
+                <small>يمكنك معرفة استهلاكك من فاتورة الكهرباء</small>
+            </div>
+            
+            <div class="form-group">
+                <label for="autonomyDays">عدد الأيام التي تريد تخزين الطاقة لها:</label>
+                <input type="number" id="autonomyDays" value="2" min="1" required>
+                <small>الأيام التي قد لا تشرق فيها الشمس بشكل كافي</small>
+            </div>
+            
+            <div class="form-group">
+                <label for="batteryType">نوع البطارية المفضل:</label>
+                <select id="batteryType">
+                    <option value="lithium">ليثيوم (LiFePO4)</option>
+                    <option value="lead-acid">رصاص-حمض (AGM/GEL)</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="batteryCapacity">سعة البطارية الواحدة (اختياري):</label>
+                <input type="number" id="batteryCapacity" placeholder="اتركه فارغاً للحساب التلقائي">
+                <small>بالكيلوواط ساعة (kWh)، مثال: 5 للبطارية الواحدة</small>
+            </div>
+            
+            <div class="form-group">
+                <label for="installation">نوع التركيب:</label>
+                <select id="installation" onchange="showInstallationWarning()">
+                    <option value="roof">أسطح المنازل</option>
+                    <option value="ground">أرضي</option>
+                    <option value="wall">حائطي</option>
+                </select>
+                <div id="roofWarning" class="installation-warning">
+                    ⚠ تأكد من قدرة السقف على تحمل الوزن (خاصة لبطاريات الرصاص الثقيلة)
+                </div>
+                <div id="groundWarning" class="installation-warning">
+                    ⚠ يحتاج موقع مرتفع في المناطق المعرضة للفيضانات وحاوية مقاومة للعوامل الجوية
+                </div>
+                <div id="wallWarning" class="installation-warning">
+                    ⚠ يحتاج جداراً قوياً (خاصة للأنظمة الكبيرة) ويجب تجنب التعرض المباشر للشمس
+                </div>
+            </div>
+            
+            <button type="button" onclick="calculateBattery()">احسب احتياجاتك</button>
+        </div>
+        
+        <div id="resultSection" class="result-section">
+            <div class="tab-buttons">
+                <button class="tab-btn active" onclick="openTab('technical')">التوصيات الفنية</button>
+                <button class="tab-btn" onclick="openTab('financial')">التوفير المالي</button>
+                <button class="tab-btn" onclick="openTab('comparison')">المقارنات</button>
+                <button class="tab-btn" onclick="openTab('info')">المعلومات</button>
+            </div>
+            
+            <div id="technical" class="tab-content active">
+                <div class="result-card">
+                    <h3>التوصية الفنية</h3>
+                    <div id="techResult" class="result-item animated"></div>
+                    
+                    <div id="batteryCountResult" class="battery-count animated"></div>
+                    
+                    <div id="installationResult" class="result-item animated"></div>
+                    
+                    <div class="chart-container">
+                        <canvas id="performanceChart"></canvas>
+                    </div>
+
+                    <div class="share-section">
+                        <button id="whatsappShare" class="whatsapp-share" onclick="shareOnWhatsApp()">
+                            <svg class="whatsapp-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                <path fill="currentColor" d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+                            </svg>
+                            مشاركة النتائج عبر واتساب
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="financial" class="tab-content">
+                <div class="result-card">
+                    <h3>التوفير المالي</h3>
+                    <div id="savingsResult" class="result-item animated"></div>
+                    
+                    <div class="chart-container">
+                        <canvas id="savingsChart"></canvas>
+                    </div>
+                    
+                    <div id="carbonResult" class="result-item animated"></div>
+                </div>
+            </div>
+            
+            <div id="comparison" class="tab-content">
+                <div class="result-card">
+                    <h3>مقارنة بين أنواع البطاريات</h3>
+                    
+                    <div class="chart-container">
+                        <canvas id="comparisonChart"></canvas>
+                    </div>
+                    
+                    <h4>مقارنة العلامات التجارية</h4>
+                    <div id="brandComparison"></div>
+                    
+                    <h4>موردون محليون</h4>
+                    <div class="map-controls">
+                        <div class="map-control">
+                            <label for="countrySelect">الدولة:</label>
+                            <select id="countrySelect" class="country-select" onchange="updateCountry()">
+                                <option value="saudi">المملكة العربية السعودية</option>
+                                <option value="uae">الإمارات العربية المتحدة</option>
+                                <option value="egypt">مصر</option>
+                                <option value="kuwait">الكويت</option>
+                                <option value="jordan">الأردن</option>
+                            </select>
+                        </div>
+                        <div class="map-control">
+                            <label for="citySelect">المدينة:</label>
+                            <select id="citySelect" class="city-select" onchange="updateMap()">
+                                <!-- سيتم ملؤها بالجافاسكريبت -->
+                            </select>
+                        </div>
+                    </div>
+                    <div class="map-container">
+                        <div id="supplierMap" class="supplier-map"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="info" class="tab-content">
+                <div class="result-card">
+                    <h3>معلومات وإرشادات</h3>
+                    
+                    <div class="info-card">
+                        <h4>أسئلة شائعة</h4>
+                        <p><strong>س: ما الفرق بين <span class="glossary-term" title="وحدة قياس الطاقة الكهربائية (ألف واط في ساعة)">كيلوواط ساعة (kWh)</span> و <span class="glossary-term" title="وحدة قياس القدرة الكهربائية (ألف فولت أمبير)">كيلو فولت أمبير (kVA)</span>؟</strong><br>
+                        ج: الكيلوواط ساعة تقيس الطاقة الفعلية المستهلكة، بينما kVA تقيس الطاقة الظاهرية (تستخدم عادةً للمولدات).</p>
+                        
+                        <p><strong>س: كيف أحسب احتياجاتي من البطاريات؟</strong><br>
+                        ج: تحتاج إلى معرفة <span class="glossary-term" title="إجمالي استهلاكك اليومي من الكهرباء بالكيلوواط ساعة">الاستهلاك اليومي</span> وعدد <span class="glossary-term" title="الأيام التي تريد أن تعمل فيها بدون شمس">أيام الاستقلالية</span> ونوع <span class="glossary-term" title="نسبة الطاقة القابلة للاستخدام من البطارية">عمق التفريغ</span>.</p>
+                    </div>
+                    
+                    <div class="info-card">
+                        <h4>قاموس المصطلحات</h4>
+                        <div class="battery-specs">
+                            <div class="spec-card">
+                                <div class="spec-title">وحدات القياس</div>
+                                <p><span class="glossary-term" title="كيلوواط ساعة - وحدة قياس الطاقة">kWh</span>: الطاقة</p>
+                                <p><span class="glossary-term" title="كيلووات - وحدة قياس القدرة">kW</span>: القدرة</p>
+                                <p><span class="glossary-term" title="أمبير ساعة - سعة البطارية">Ah</span>: السعة</p>
+                            </div>
+                            <div class="spec-card">
+                                <div class="spec-title">أنواع البطاريات</div>
+                                <p><span class="glossary-term" title="بطاريات الليثيوم الحديد فوسفات">LiFePO4</span>: الأكثر أماناً</p>
+                                <p><span class="glossary-term" title="بطاريات الرصاص المغمورة">Flooded</span>: تحتاج صيانة</p>
+                                <p><span class="glossary-term" title="بطاريات الرصاص المغلقة">AGM/GEL</span>: لا تحتاج صيانة</p>
+                            </div>
+                            <div class="spec-card">
+                                <div class="spec-title">مصطلحات فنية</div>
+                                <p><span class="glossary-term" title="نسبة الطاقة المستخدمة من البطارية">عمق التفريغ (DoD)</span></p>
+                                <p><span class="glossary-term" title="عدد دورات الشحن الكاملة">دورات الشحن</span></p>
+                                <p><span class="glossary-term" title="نسبة الطاقة المفقودة أثناء الشحن/التفريغ">الكفاءة</span></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="signature">
+            تم تصميم الأداة بواسطة <strong>ميرغني أبوالقاسم عثمان</strong> | 
+            <a href="mailto:merghanigasimosman@gmail.com">merghanigasimosman@gmail.com</a>
+        </div>
+    </div>
+
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <script>
+        // بيانات العلامات التجارية
+        const brandData = {
+            "tesla": {
+                name: "تسلا باوروال",
+                price: 400,
+                lifespan: 15,
+                efficiency: 95,
+                notes: "أفضل للأغراض المنزلية، تصميم أنيق، نظام إدارة ذكي",
+                rating: 4.8,
+                weight: 114,
+                capacities: [5, 10, 15]
+            },
+            "byd": {
+                name: "بي واي دي",
+                price: 350,
+                lifespan: 12,
+                efficiency: 93,
+                notes: "جودة عالية بسعر معقول، شهادة أمان ممتازة",
+                rating: 4.5,
+                weight: 98,
+                capacities: [2.5, 5, 7.5, 10]
+            },
+            "lg": {
+                name: "إل جي كيم",
+                price: 380,
+                lifespan: 14,
+                efficiency: 94,
+                notes: "حلول متكاملة للطاقة، كفاءة عالية في المساحات الصغيرة",
+                rating: 4.6,
+                weight: 105,
+                capacities: [3, 6, 9, 12]
+            },
+            "local": {
+                name: "بطاريات محلية",
+                price: 250,
+                lifespan: 8,
+                efficiency: 85,
+                notes: "مناسبة للميزانيات المحدودة، توفر قطع غيار محلية",
+                rating: 3.9,
+                weight: 120,
+                capacities: [1, 2, 5, 10]
+            }
+        };
+
+        // بيانات الموردين حسب البلد والمدينة
+        const supplierLocations = {
+            "saudi": {
+                name: "المملكة العربية السعودية",
+                cities: {
+                    "riyadh": {
+                        name: "الرياض",
+                        center: [24.7136, 46.6753],
+                        zoom: 12,
+                        suppliers: [
+                            {name: "الشركة السعودية للطاقة", lat: 24.7136, lng: 46.6753, address: "حي العليا، الرياض", phone: "+966112345678"},
+                            {name: "مستودع الشمس", lat: 24.8136, lng: 46.7153, address: "حي النخيل، الرياض", phone: "+966112345679"},
+                            {name: "تقنية البطاريات", lat: 24.6536, lng: 46.7753, address: "حي السليمانية، الرياض", phone: "+966112345680"}
+                        ]
+                    },
+                    "jeddah": {
+                        name: "جدة",
+                        center: [21.5433, 39.1728],
+                        zoom: 12,
+                        suppliers: [
+                            {name: "مركز جدة للطاقة", lat: 21.5433, lng: 39.1728, address: "حي الصفا، جدة", phone: "+966122345678"},
+                            {name: "تكنو باور", lat: 21.5833, lng: 39.1428, address: "حي الحمراء، جدة", phone: "+966122345679"}
+                        ]
+                    },
+                    "dammam": {
+                        name: "الدمام",
+                        center: [26.4207, 50.0888],
+                        zoom: 12,
+                        suppliers: [
+                            {name: "شركة الخليج للطاقة", lat: 26.4207, lng: 50.0888, address: "حي النخيل، الدمام", phone: "+966133345678"},
+                            {name: "الشرقية للطاقة الشمسية", lat: 26.3807, lng: 50.0988, address: "حي الشاطئ، الدمام", phone: "+966133345679"}
+                        ]
+                    }
+                }
+            },
+            "uae": {
+                name: "الإمارات العربية المتحدة",
+                cities: {
+                    "dubai": {
+                        name: "دبي",
+                        center: [25.2048, 55.2708],
+                        zoom: 12,
+                        suppliers: [
+                            {name: "مركز دبي للطاقة", lat: 25.2048, lng: 55.2708, address: "برج خليفة، دبي", phone: "+97142345678"},
+                            {name: "تكنولوجيا الطاقة", lat: 25.2248, lng: 55.2908, address: "المركز التجاري، دبي", phone: "+97142345679"}
+                        ]
+                    },
+                    "abudhabi": {
+                        name: "أبوظبي",
+                        center: [24.4539, 54.3773],
+                        zoom: 12,
+                        suppliers: [
+                            {name: "شركة أبوظبي للطاقة", lat: 24.4539, lng: 54.3773, address: "كورنيش أبوظبي", phone: "+97124456789"}
+                        ]
+                    }
+                }
+            },
+            "egypt": {
+                name: "مصر",
+                cities: {
+                    "cairo": {
+                        name: "القاهرة",
+                        center: [30.0444, 31.2357],
+                        zoom: 12,
+                        suppliers: [
+                            {name: "الشركة المصرية للطاقة", lat: 30.0444, lng: 31.2357, address: "وسط البلد، القاهرة", phone: "+20223456789"}
+                        ]
+                    },
+                    "alexandria": {
+                        name: "الإسكندرية",
+                        center: [31.2001, 29.9187],
+                        zoom: 12,
+                        suppliers: [
+                            {name: "مستودع الإسكندرية", lat: 31.2001, lng: 29.9187, address: "سيدي جابر، الإسكندرية", phone: "+2034567890"}
+                        ]
+                    }
+                }
+            },
+            "kuwait": {
+                name: "الكويت",
+                cities: {
+                    "kuwaitcity": {
+                        name: "مدينة الكويت",
+                        center: [29.3759, 47.9774],
+                        zoom: 12,
+                        suppliers: [
+                            {name: "الشركة الكويتية للطاقة", lat: 29.3759, lng: 47.9774, address: "شارع الخليج العربي", phone: "+96522345678"}
+                        ]
+                    }
+                }
+            },
+            "jordan": {
+                name: "الأردن",
+                cities: {
+                    "amman": {
+                        name: "عمان",
+                        center: [31.9454, 35.9284],
+                        zoom: 12,
+                        suppliers: [
+                            {name: "مركز عمان للطاقة", lat: 31.9454, lng: 35.9284, address: "شارع المدينة المنورة", phone: "+96262345678"}
+                        ]
+                    }
+                }
+            }
+        };
+
+        // خريطة الموردين
+        let map;
+        let markers = [];
+        let currentResults = {};
+
+        function initMap() {
+            map = L.map('supplierMap').setView([24.7136, 46.6753], 12);
+            
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            }).addTo(map);
+            
+            // تهيئة قائمة الدول والمدن
+            updateCountryDropdowns();
+            updateMap();
+        }
+
+        function updateCountryDropdowns() {
+            const countrySelect = document.getElementById('countrySelect');
+            const citySelect = document.getElementById('citySelect');
+            
+            // تعبئة قائمة المدن حسب الدولة المختارة
+            updateCityDropdown(countrySelect.value);
+        }
+
+        function updateCityDropdown(country) {
+            const citySelect = document.getElementById('citySelect');
+            citySelect.innerHTML = '';
+            
+            const cities = supplierLocations[country].cities;
+            for (const [key, city] of Object.entries(cities)) {
+                const option = document.createElement('option');
+                option.value = key;
+                option.textContent = city.name;
+                citySelect.appendChild(option);
+            }
+        }
+
+        function updateCountry() {
+            const country = document.getElementById('countrySelect').value;
+            updateCityDropdown(country);
+            updateMap();
+        }
+
+        function updateMap() {
+            // إزالة العلامات القديمة
+            markers.forEach(marker => map.removeLayer(marker));
+            markers = [];
+            
+            const country = document.getElementById('countrySelect').value;
+            const city = document.getElementById('citySelect').value;
+            
+            const cityData = supplierLocations[country].cities[city];
+            
+            // تحديث مركز الخريطة ومستوى التكبير
+            map.setView(cityData.center, cityData.zoom);
+            
+            // إضافة العلامات الجديدة
+            cityData.suppliers.forEach(supplier => {
+                const marker = L.marker([supplier.lat, supplier.lng])
+                    .addTo(map)
+                    .bindPopup(`
+                        <b>${supplier.name}</b><br>
+                        ${supplier.address}<br>
+                        الهاتف: ${supplier.phone}<br>
+                        <small>${supplierLocations[country].name} - ${cityData.name}</small>
+                    `);
+                
+                markers.push(marker);
+            });
+            
+            if (cityData.suppliers.length > 0) {
+                const group = new L.featureGroup(markers);
+                map.fitBounds(group.getBounds().pad(0.2));
+            }
+        }
+
+        // تحذيرات التركيب
+        function showInstallationWarning() {
+            document.querySelectorAll('.installation-warning').forEach(w => w.style.display = 'none');
+            
+            const type = document.getElementById('installation').value;
+            document.getElementById(`${type}Warning`).style.display = 'block';
+        }
+
+        // تغيير الألوان حسب نوع البطارية
+        function setTheme(isLithium) {
+            document.documentElement.className = isLithium ? 'theme-lithium' : 'theme-lead';
+        }
+
+        // تبديل التبويبات
+        function openTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            document.getElementById(tabId).classList.add('active');
+            event.currentTarget.classList.add('active');
+        }
+
+        // مشاركة النتائج عبر واتساب
+        function shareOnWhatsApp() {
+            const batteryType = document.getElementById('batteryType').value === 'lithium' ? 'ليثيوم (LiFePO4)' : 'رصاص-حمض (AGM/GEL)';
+            const capacity = currentResults.capacity.toFixed(2);
+            const batteryCount = currentResults.batteryCount;
+            const batteryCapacity = currentResults.usedBatteryCapacity.toFixed(2);
+            const totalCost = currentResults.totalCost.toFixed(0);
+            const lifespan = currentResults.lifespan;
+            
+            const message = `نتائج حساب بطاريات الطاقة الشمسية:
+            
+نوع البطارية: ${batteryType}
+السعة الإجمالية: ${capacity} kWh
+عدد البطاريات: ${batteryCount}
+سعة البطارية الواحدة: ${batteryCapacity} kWh
+التكلفة الإجمالية: ~${totalCost} دولار
+العمر الافتراضي: ${lifespan} سنوات
+
+تم الحساب باستخدام أداة خبير بطاريات الطاقة الشمسية`;
+
+            const encodedMessage = encodeURIComponent(message);
+            const whatsappUrl = `https://wa.me/?text=${encodedMessage}`;
+            
+            window.open(whatsappUrl, '_blank');
+        }
+
+        // الحساب الرئيسي
+        function calculateBattery() {
+            // جلب القيم من النموذج
+            const dailyUsage = parseFloat(document.getElementById('dailyUsage').value);
+            const autonomyDays = parseInt(document.getElementById('autonomyDays').value);
+            const batteryType = document.getElementById('batteryType').value;
+            const installation = document.getElementById('installation').value;
+            const batteryCapacity = parseFloat(document.getElementById('batteryCapacity').value) || null;
+            
+            // التحقق من المدخلات
+            if (isNaN(dailyUsage) || dailyUsage <= 0) {
+                alert("الرجاء إدخال استهلاك يومي صحيح!");
+                return;
+            }
+            
+            // معاملات الحساب
+            const isLithium = batteryType === 'lithium';
+            setTheme(isLithium);
+            
+            const dodFactor = isLithium ? 0.8 : 0.5;
+            const efficiency = isLithium ? 0.95 : 0.80;
+            const lifespan = isLithium ? 12 : 4; // سنوات
+            const costPerKWh = isLithium ? 350 : 150; // دولار
+            
+            // تعديل التكلفة حسب نوع التركيب
+            let installationCostFactor = 1;
+            let installationNotes = "";
+            
+            switch(installation) {
+                case 'roof':
+                    installationCostFactor = isLithium ? 1.05 : 1.1; // تكلفة أعلى للرصاص على السقف
+                    installationNotes = "يحتاج تقييم هيكلي للسقف خاصة للبطاريات الثقيلة";
+                    break;
+                case 'ground':
+                    installationCostFactor = 1.15;
+                    installationNotes = "يتطلب حاوية مقاومة للعوامل الجوية وموقعاً مرتفعاً إذا كانت المنطقة معرضة للفيضانات";
+                    break;
+                case 'wall':
+                    installationCostFactor = 1.07;
+                    installationNotes = "يجب تثبيت حوامل قوية وتجنب التعرض المباشر لأشعة الشمس";
+                    break;
+            }
+            
+            // حساب السعة المطلوبة
+            const capacityKWh = (dailyUsage * autonomyDays) / dodFactor;
+            
+            // حساب عدد البطاريات المطلوبة
+            let batteryCount = 1;
+            let usedBatteryCapacity = capacityKWh;
+            
+            if (batteryCapacity && batteryCapacity > 0) {
+                batteryCount = Math.ceil(capacityKWh / batteryCapacity);
+                usedBatteryCapacity = batteryCapacity;
+            } else {
+                // إذا لم يتم تحديد سعة البطارية، نستخدم سعة افتراضية حسب النوع
+                usedBatteryCapacity = isLithium ? 5 : 2; // 5kWh لليثيوم، 2kWh للرصاص
+                batteryCount = Math.ceil(capacityKWh / usedBatteryCapacity);
+            }
+            
+            // حساب التكلفة مع تعديل التركيب
+            const baseCost = capacityKWh * costPerKWh;
+            const installationCost = baseCost * (installationCostFactor - 1);
+            const totalCost = baseCost * installationCostFactor;
+            
+            // حساب التوفير السنوي (بافتراض 0.2 دولار لكل kWh)
+            const annualSavings = dailyUsage * 365 * 0.2;
+            const paybackYears = totalCost / annualSavings;
+            
+            // حساب انبعاثات الكربون
+            const carbonReduction = dailyUsage * 0.5 * 365; // كجم CO2 سنوياً
+            
+            // حفظ النتائج الحالية للمشاركة
+            currentResults = {
+                batteryType: batteryType === 'lithium' ? 'ليثيوم (LiFePO4)' : 'رصاص-حمض (AGM/GEL)',
+                capacity: capacityKWh,
+                batteryCount: batteryCount,
+                usedBatteryCapacity: usedBatteryCapacity,
+                totalCost: totalCost,
+                lifespan: lifespan
+            };
+            
+            // عرض النتائج
+            showTechnicalResults(isLithium, capacityKWh, totalCost, efficiency, lifespan, installation, installationNotes, installationCost, batteryCount, usedBatteryCapacity);
+            showFinancialResults(annualSavings, paybackYears, carbonReduction);
+            drawCharts(isLithium, capacityKWh, totalCost, annualSavings);
+            showBrandComparison();
+            
+            // إظهار قسم النتائج
+            document.getElementById('resultSection').style.display = 'block';
+            document.getElementById('resultSection').scrollIntoView({ behavior: 'smooth' });
+        }
+        
+        // عرض النتائج الفنية
+        function showTechnicalResults(isLithium, capacity, cost, efficiency, lifespan, installation, installationNotes, installationCost, batteryCount, batteryCapacity) {
+            const typeName = isLithium ? "ليثيوم (LiFePO4)" : "رصاص-حمض (AGM/GEL)";
+            const installationText = installation === 'roof' ? "أسطح المنازل" : 
+                                   installation === 'ground' ? "أرضي" : "حائطي";
+            
+            document.getElementById('techResult').innerHTML = `
+                <h4>المواصفات الفنية</h4>
+                <p><strong>السعة الإجمالية المطلوبة:</strong> ${capacity.toFixed(2)} kWh</p>
+                <p><strong>نوع البطارية:</strong> ${typeName}</p>
+                <p><strong>كفاءة الشحن/التفريغ:</strong> ${(efficiency * 100).toFixed(0)}%</p>
+                <p><strong>العمر الافتراضي:</strong> ${lifespan} سنوات</p>
+                <p><strong>التكلفة الأساسية:</strong> ~${(cost / 1.1).toFixed(0)} دولار</p>
+            `;
+            
+            document.getElementById('batteryCountResult').innerHTML = `
+                <h4>تفاصيل البطاريات</h4>
+                <p><strong>عدد البطاريات المطلوبة:</strong> ${batteryCount}</p>
+                <p><strong>سعة البطارية الواحدة:</strong> ${batteryCapacity.toFixed(2)} kWh</p>
+                <p><strong>السعة الإجمالية:</strong> ${(batteryCount * batteryCapacity).toFixed(2)} kWh</p>
+                ${batteryCount > 1 ? `<p><small>ملاحظة: يتم توصيل البطاريات ${isLithium ? "على التوازي" : "حسب متطلبات النظام"}</small></p>` : ''}
+            `;
+            
+            document.getElementById('installationResult').innerHTML = `
+                <h4>تفاصيل التركيب</h4>
+                <p><strong>نوع التركيب:</strong> ${installationText}</p>
+                <p><strong>تكلفة التركيب:</strong> ~${installationCost.toFixed(0)} دولار</p>
+                <p><strong>إجمالي التكلفة:</strong> ~${cost.toFixed(0)} دولار</p>
+                <p><strong>ملاحظات التركيب:</strong> ${installationNotes}</p>
+            `;
+        }
+        
+        // عرض النتائج المالية
+        function showFinancialResults(annualSavings, paybackYears, carbonReduction) {
+            document.getElementById('savingsResult').innerHTML = `
+                <h4>التحليل المالي</h4>
+                <p><strong>التوفير السنوي المتوقع:</strong> ~${annualSavings.toFixed(0)} دولار</p>
+                <p><strong>فترة استرداد التكلفة:</strong> ~${paybackYears.toFixed(1)} سنوات</p>
+                <p><strong>التوفير خلال عمر النظام:</strong> ~${(annualSavings * 10).toFixed(0)} دولار (10 سنوات)</p>
+            `;
+            
+            document.getElementById('carbonResult').innerHTML = `
+                <h4>الأثر البيئي</h4>
+                <p><strong>تقليل انبعاثات الكربون:</strong> ~${carbonReduction.toFixed(0)} كجم CO2 سنوياً</p>
+                <p>وهذا يعادل:</p>
+                <ul>
+                    <li>زراعة ${Math.round(carbonReduction / 20)} شجرة سنوياً</li>
+                    <li>توفير ${Math.round(carbonReduction / 100)} برميل نفط سنوياً</li>
+                    <li>إزالة ${Math.round(carbonReduction / 1000)} سيارة من الطريق</li>
+                </ul>
+            `;
+        }
+        
+        // رسم الرسوم البيانية
+        function drawCharts(isLithium, capacityKWh, totalCost, annualSavings) {
+            // رسم بياني أداء البطارية
+            const performanceCtx = document.getElementById('performanceChart').getContext('2d');
+            new Chart(performanceCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['السعة المستخدمة', 'السعة الاحتياطية'],
+                    datasets: [{
+                        data: [isLithium ? 80 : 50, isLithium ? 20 : 50],
+                        backgroundColor: [isLithium ? '#3498db' : '#e74c3c', '#ecf0f1'],
+                    }]
+                },
+                options: {
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'نسبة استخدام السعة (عمق التفريغ)',
+                            font: {
+                                family: 'Tajawal',
+                                size: 16
+                            }
+                        },
+                        legend: {
+                            rtl: true,
+                            position: 'bottom',
+                            labels: {
+                                font: {
+                                    family: 'Tajawal'
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+            
+            // رسم بياني التوفير المالي
+            const savingsCtx = document.getElementById('savingsChart').getContext('2d');
+            const years = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+            new Chart(savingsCtx, {
+                type: 'line',
+                data: {
+                    labels: years.map(y => `السنة ${y}`),
+                    datasets: [{
+                        label: 'إجمالي التوفير',
+                        data: years.map(y => annualSavings * y),
+                        borderColor: '#2ecc71',
+                        backgroundColor: 'rgba(46, 204, 113, 0.1)',
+                        fill: true,
+                        tension: 0.3
+                    },
+                    {
+                        label: 'التكلفة الإجمالية',
+                        data: years.map(() => totalCost),
+                        borderColor: '#e74c3c',
+                        borderDash: [5, 5],
+                        backgroundColor: 'rgba(231, 76, 60, 0.1)',
+                        fill: false
+                    }]
+                },
+                options: {
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'مقارنة التكلفة والتوفير على مدى 10 سنوات',
+                            font: {
+                                family: 'Tajawal',
+                                size: 16
+                            }
+                        },
+                        legend: {
+                            rtl: true,
+                            position: 'bottom',
+                            labels: {
+                                font: {
+                                    family: 'Tajawal'
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: 'الدولار',
+                                font: {
+                                    family: 'Tajawal'
+                                }
+                            }
+                        },
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'السنوات',
+                                font: {
+                                    family: 'Tajawal'
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+            
+            // رسم بياني المقارنة
+            const comparisonCtx = document.getElementById('comparisonChart').getContext('2d');
+            new Chart(comparisonCtx, {
+                type: 'radar',
+                data: {
+                    labels: ['السعر', 'العمر', 'الكفاءة', 'سهولة التركيب', 'الأداء الحراري', 'الصيانة'],
+                    datasets: [
+                        {
+                            label: 'ليثيوم',
+                            data: [7, 9, 9, 8, 7, 8],
+                            backgroundColor: 'rgba(52, 152, 219, 0.2)',
+                            borderColor: 'rgba(52, 152, 219, 1)',
+                            pointBackgroundColor: 'rgba(52, 152, 219, 1)'
+                        },
+                        {
+                            label: 'رصاص',
+                            data: [4, 5, 6, 6, 4, 3],
+                            backgroundColor: 'rgba(231, 76, 60, 0.2)',
+                            borderColor: 'rgba(231, 76, 60, 1)',
+                            pointBackgroundColor: 'rgba(231, 76, 60, 1)'
+                        }
+                    ]
+                },
+                options: {
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'مقارنة بين نوعي البطاريات (من 10)',
+                            font: {
+                                family: 'Tajawal',
+                                size: 16
+                            }
+                        },
+                        legend: {
+                            rtl: true,
+                            position: 'bottom',
+                            labels: {
+                                font: {
+                                    family: 'Tajawal'
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        r: {
+                            angleLines: {
+                                display: true
+                            },
+                            suggestedMin: 0,
+                            suggestedMax: 10,
+                            pointLabels: {
+                                font: {
+                                    family: 'Tajawal'
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+        
+        // عرض مقارنة العلامات التجارية
+        function showBrandComparison() {
+            let comparisonHTML = `
+                <table class="brand-table">
+                    <thead>
+                        <tr>
+                            <th>العلامة التجارية</th>
+                            <th>السعر (لكل kWh)</th>
+                            <th>العمر (سنوات)</th>
+                            <th>الكفاءة</th>
+                            <th>الوزن (كجم)</th>
+                            <th>السعات المتوفرة</th>
+                            <th>التقييم</th>
+                            <th>ملاحظات</th>
+                        </tr>
+                    </thead>
+                    <tbody>`;
+            
+            for (const [key, brand] of Object.entries(brandData)) {
+                comparisonHTML += `
+                    <tr>
+                        <td><strong>${brand.name}</strong></td>
+                        <td>~${brand.price} دولار</td>
+                        <td>${brand.lifespan}</td>
+                        <td>${brand.efficiency}%</td>
+                        <td>${brand.weight}</td>
+                        <td>${brand.capacities.join(', ')} kWh</td>
+                        <td class="rating">${'★'.repeat(Math.floor(brand.rating))}${'☆'.repeat(5-Math.floor(brand.rating))} ${brand.rating}</td>
+                        <td class="notes-cell">${brand.notes}</td>
+                    </tr>`;
+            }
+            
+            comparisonHTML += `</tbody></table>`;
+            document.getElementById('brandComparison').innerHTML = comparisonHTML;
+        }
+
+        // تهيئة الخريطة عند تحميل الصفحة
+        window.onload = function() {
+            initMap();
+            showInstallationWarning();
+        };
+    </script>
+</body>
+  </html>
